@@ -1,0 +1,7 @@
+---
+
+    - name: Enable wal2json.
+      hosts: localhost
+      roles: 
+        - wal2json
+      

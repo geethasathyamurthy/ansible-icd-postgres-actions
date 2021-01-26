@@ -1,0 +1,11 @@
+---
+
+    - name: Configuring wal2json.
+      configure_wal2json:
+        region: "{{ region | default('') }}"
+        deployment_id: "{{ deployment_id | default('') }}"
+        bearer_token: "{{ bearer_token | default('') }}"
+        env_bearer_token: "{{ lookup('env','IC_IAM_TOKEN') }}"
+        repl_password: "{{ repl_password | default('Abc1234abc') }}"
+        slot_name: "{{ slot_name | default('myslot123') }}"
+        database_name: "{{ database_name | default('ibmclouddb') }}"
