@@ -4,7 +4,7 @@ Use this role to configure WAL2JSON for PostgreSQL.
 
 ## PreRequisites
 This example needs a PostgreSQL provisioned on IBM Cloud. The detailed steps to provision the PostgreSQL on IBM Cloud 
-is [here](https://github.com/Cloud-Schematics/postgresql_wal2json)
+is [here](https://github.com/Cloud-Schematics/VSI-database)
 
 ## Automate the playbook execution with schematics action 
 
@@ -36,6 +36,51 @@ Create schematics action to run Ansible playbook in IBM Cloud. In the example we
       ],
       "source_readme_url": "stringtype",
       "source_type": "GitHub",
+      "inputs": [
+        {
+            "name": "region",
+            "value": "eu-gb",
+            "metadata": {
+                "type": "string",
+                "secure": true,
+                "default_value": "us-east"
+            }
+        },
+        {
+            "name": "deployment_id",
+            "value": "crn:v1:..............",
+            "metadata": {
+                "type": "string",
+                "default_value": "something........"
+            }
+        },
+        {
+            "name": "repl_password",
+            "value": "mypassword",
+            "metadata": {
+                "type": "string",
+                "secure": true,
+                "default_value": "hellopassword"
+            }
+        },
+        {
+            "name": "slot_name",
+            "value": "myslotname",
+            "metadata": {
+                "type": "string",
+                "default_value": "some_slot_name"
+            }
+        },
+        {
+            "name": "database_name",
+            "value": "ibmclouddb",
+            "metadata": {
+                "type": "string",
+                "secure": false,
+                "default_value": "mydb"
+            }
+        }
+    ]
   }
   ```
 
@@ -77,6 +122,15 @@ Steps:
 - In github url box pass: https://github.com/Cloud-Schematics/postgresql_wal2json
 - Hit retrieve playbooks button
 - Select wal2json playbook from Playbooks dropdown
+- Tap Advanced options:
+- Add variables:
+```
+region: <region name>
+deployment_id: <postgres deployment id>
+repl_password: <repl user password>
+slot_name: <any slot name>
+database_name: <name of existing database>
+```
 - Tap next button
 - Once the action come in normal state, Hit run action button.
 - You can check job logs in Jobs page
