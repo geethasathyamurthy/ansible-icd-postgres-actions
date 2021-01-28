@@ -1,18 +1,31 @@
-# Databases For PostgreSQL- Configure Wal2json
+# Databases For PostgreSQL
 
-Use this role to configure WAL2JSON for PostgreSQL.
+Ansible playbooks for [Databases For PostgreSQL](https://cloud.ibm.com/docs/databases-for-postgresql) to perform the following operations:
+
+* configure WAL2JSON.
+
+You can create a Schematics Action, using these playbooks; and allow your team members to perform these Actions in a controller manner.  
+Follow the instruction to onboard these Ansible playbooks as Schematics Action, and run them as Schematics Jobs. 
 
 ## PreRequisites
-This example needs a PostgreSQL provisioned on IBM Cloud. The detailed steps to provision the PostgreSQL on IBM Cloud 
+- PostgreSQL provisioned in your IBM Cloud Account. The detailed steps to provision the PostgreSQL on IBM Cloud 
 is [here](https://github.com/Cloud-Schematics/VSI-database)
 
-## Automate the playbook execution with schematics action 
+## Inputs:
+- ID of deployed postgresql
+- Region where postgresql is deployed
+- Set a password for [repl_user](https://cloud.ibm.com/docs/databases-for-postgresql?topic=databases-for-postgresql-user-management#the-repl-user)
+- Replication slot name
+- Name of the database
 
-Create schematics action to run Ansible playbook in IBM Cloud. In the example we will use schematics actions API to illustrate the execution of playbook.
+## Run the ansible playbook using Schematics API
+
+In this example, we will use the Schematics Actions API to configure `wal2json` Action, using the `wal2json.yml` playbook.  
+Further, use the Schematics Job API to run the newly created `wal2json` action.
  
-- Create a Schematics action:
+- Create a Schematics action: "wal2json"
 
- Make POST request {url}/v2/actions using following payload:
+ Use the `POST {url}/v2/actions` with the following payload:
  
  Url: https://schematics.cloud.ibm.com
  
@@ -34,7 +47,6 @@ Create schematics action to run Ansible playbook in IBM Cloud. In the example we
       "tags": [
         "string"
       ],
-      "source_readme_url": "stringtype",
       "source_type": "GitHub",
       "inputs": [
         {
@@ -84,9 +96,11 @@ Create schematics action to run Ansible playbook in IBM Cloud. In the example we
   }
   ```
 
-- Create a job that will run the playbook:
+  The response payload will include the Action ID for the newly created Schematics Action definition.
 
-  Make POST request to {url}/v2/jobs using following payload:
+- Create & run the Schematics Job for "wal2json"
+
+  Use the `POST {url}/v2/jobs` with the following payload:
   
   Url: https://schematics.cloud.ibm.com
   
@@ -101,41 +115,39 @@ Create schematics action to run Ansible playbook in IBM Cloud. In the example we
     }
     ```
 
-- Check the progress by getting ansible logs:
+- Check the Schematics Job status and the ansible logs:
 
-  Make GET request to {url}/v2/jobs/{job-id}/logs.
+  Use the `GET {url}/v2/jobs/{job-id}/logs`. 
  
   Url: https://schematics.cloud.ibm.com
   
   Pass header: Authorization: {bearer token}
 
-## Execute the playbook using Schematics UI
+## Run the ansible playbook using Schematics UI
 
 Steps:
 
-- Login to cloud.ibm.com
-- From top left open the Navigation menu
-- Tap Schematics
-- Again in left side navigation menu, tap on Actions
-- Click on Create action button(right side of screen)
-- Give action name, resource-group, location and hit create button
-- In github url box pass: https://github.com/Cloud-Schematics/postgresql_wal2json
-- Hit retrieve playbooks button
-- Select wal2json playbook from Playbooks dropdown
-- Tap Advanced options:
-- Add variables:
-```
-region: <region name>
-deployment_id: <postgres deployment id>
-repl_password: <repl user password>
-slot_name: <any slot name>
-database_name: <name of existing database>
-```
-- Tap next button
-- Once the action come in normal state, Hit run action button.
-- You can check job logs in Jobs page
+- Open https://cloud.ibm.com/schematics/actions to view the list of Schematics Actions.
+- Click `Create action` button to create a new Schematics Action definition
+- In the Create action page - section 1, provide the following inputs, to create a `wal2json` action in `Draft` state.
+  * Action name : wal2json
+  * Resource group: default
+  * Location : us-east
+- In the Create action page - section 2, provide the following input
+  * Github url : https://github.com/Cloud-Schematics/ansible-icd-postgres-actions
+  * Click on `Retrieve playbooks` button
+  * Select `wal2json.yml` from the dropdown
+- In the Create action page - Advanced options, provide the following input
+  * Add `region` as key and `<Name of the resion>` as value
+  * Add `deployment_id` as key and `<postgres deployment id>` as value
+  * Add `repl_password` as key and `<repl user password>` as value
+  * Add `database_name` as key and `<name of existing database>` as value
+- Press the `Next` button, and wait for the newly created `wal2json` action to move to `Normal` state.
+- Once the `wal2json` action is in `Normal` state, you can run press the `Run action` button to initiate the Schematics Job
+  * You can view the job status and the job logs (or Ansible logs) in the Jobs page of the `wal2json` Schematics Action
+  * Jobs page of the `wal2json` Schematics Action will list all the historical jobs that was executed using this Action definition
 
-## Running Ansible command
+## Run the ansible playbook using Ansible Playbook command
 ```
 ansible-playbook wal2json.yml -e "region=eu-gb deployment_id=<deployment-id> repl_password=<REPL_PASSWORD> slot_name=<SLOT_NAME> database_name=<DATABASE_NAME> bearer_token=<BEARER TOKEN>"
 ```
