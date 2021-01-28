@@ -4,7 +4,7 @@ Ansible playbooks for [Databases For PostgreSQL](https://cloud.ibm.com/docs/data
 
 * [configure WAL2JSON](https://cloud.ibm.com/docs/databases-for-postgresql?topic=databases-for-postgresql-wal2json)
 
-You can create a Schematics Action, using these playbooks; and allow your team members to perform these Actions in a controller manner.  
+You can create a Schematics Action, using these playbooks and allow your team members to perform these Actions in a controller manner.  
 Follow the instruction to onboard these Ansible playbooks as Schematics Action, and run them as Schematics Jobs. 
 
 ## Prerequisites
