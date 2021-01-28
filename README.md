@@ -138,12 +138,13 @@ Steps:
   * Click on `Retrieve playbooks` button
   * Select `wal2json.yml` from the dropdown
 - In the Create action page - Advanced options, provide the following input
-  * Add `region` as key and `<Name of the resion>` as value
+  * Add `region` as key and `<Name of the region>` as value
   * Add `deployment_id` as key and `<postgres deployment id>` as value
   * Add `repl_password` as key and `<repl user password>` as value
+  * Add `slot_name` as key and `<replication slot name>` as value
   * Add `database_name` as key and `<name of existing database>` as value
 - Press the `Next` button, and wait for the newly created `wal2json` action to move to `Normal` state.
-- Once the `wal2json` action is in `Normal` state, you can run press the `Run action` button to initiate the Schematics Job
+- Once the `wal2json` action is in `Normal` state, you can press the `Run action` button to initiate the Schematics Job
   * You can view the job status and the job logs (or Ansible logs) in the Jobs page of the `wal2json` Schematics Action
   * Jobs page of the `wal2json` Schematics Action will list all the historical jobs that was executed using this Action definition
 
